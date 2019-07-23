@@ -1,5 +1,6 @@
 from keras.layers import Input, Dense
 from keras.models import Model
+import numpy as np
 
 def get_simple_autoencoder(X_train, codingfactor):
     """"Sets up a base Keras auto encoder without hidden layers.
@@ -81,3 +82,8 @@ def decode(X, encoder, decoder):
     X_encoded = encoder.predict(X)
     X_decoded = decoder.predict(X_encoded)
     return X_decoded
+
+def dist_decoding_err(X, encoder, decoder):
+    dec_X = decode(X, encoder, decoder)
+    err = np.apply_along_axis(np.linalg.norm, axis=1, arr=(X - dec_X))
+    return err
